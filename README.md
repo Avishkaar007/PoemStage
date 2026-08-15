@@ -1,27 +1,18 @@
 # Poem Stage
 
-## Live Demo
-
+ ### Live Demo 
 https://avishkaar007.github.io/PoemStage/
 
 
+
 One HTML file, wrapped as a native desktop app via Tauri. `web/index.html`
-is the single source of truth — edit only that file.
+is the single source of truth — edit only that file for UI.
 
-```
-poem-stage-app/
-├── web/index.html         ← your app (edit this, nothing else)
-├── src-tauri/              ← native desktop wrapper (Mac + Windows)
-│   ├── src/main.rs
-│   ├── Cargo.toml
-│   ├── tauri.conf.json
-│   └── capabilities/default.json
-├── package.json
-└── .github/workflows/      ← left as-is, see note below
-```
+Executables like .dmg, .deb, .exe are handled by default by Github and can be accessed in Releases Section.
 
+#
 
-## One-time local setup
+## One-time local setup ( NOT Compulsory, just for Local Running enthusiasts )
 
 Tauri needs Rust and (on Mac) the Xcode Command Line Tools — **not** full
 Xcode.
