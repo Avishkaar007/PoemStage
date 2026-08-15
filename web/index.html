@@ -480,7 +480,7 @@
   <span id="hintPrimary"><kbd>space</kbd> next</span>
   <span><kbd>&larr;</kbd> back</span>
   <span><kbd>f</kbd> fullscreen</span>
-  <span><kbd>e</kbd> edit</span>
+  <span><kbd>e</kbd> / <kbd>&#8984;E</kbd> edit</span>
 </div>
 
 <div class="controls chrome" id="controls">
@@ -491,7 +491,7 @@
   <button class="ctrl-btn" id="themeBtn" title="Switch to light">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
   </button>
-  <button class="ctrl-btn" id="editBtn" title="Edit poem (E)">
+  <button class="ctrl-btn" id="editBtn" title="Edit poem (E or &#8984;E — toggles)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
   </button>
   <button class="ctrl-btn" id="fsBtn" title="Fullscreen (F)">
@@ -866,7 +866,34 @@ modeToggle.addEventListener('click', (e) => {
 
 /* ---------------- fullscreen ---------------- */
 const fsBtn = document.getElementById('fsBtn');
-function toggleFullscreen(){
+const isTauri = typeof window.__TAURI__ !== 'undefined';
+let nativeFullscreen = false;
+
+// If running inside the Tauri desktop shell, sync our flag with the
+// window's actual state on load (in case it was launched fullscreen).
+if(isTauri && window.__TAURI__.window){
+  window.__TAURI__.window.getCurrentWindow().isFullscreen()
+    .then(v => {
+      nativeFullscreen = v;
+      document.body.classList.toggle('is-fullscreen', v);
+    })
+    .catch(() => {});
+}
+
+async function toggleFullscreen(){
+  if(isTauri && window.__TAURI__.window){
+    // The Web Fullscreen API is unreliable inside Tauri's WKWebView on
+    // macOS, so we drive the native window instead.
+    try{
+      const win = window.__TAURI__.window.getCurrentWindow();
+      nativeFullscreen = !nativeFullscreen;
+      await win.setFullscreen(nativeFullscreen);
+      document.body.classList.toggle('is-fullscreen', nativeFullscreen);
+    } catch(err){
+      console.error('Tauri fullscreen toggle failed', err);
+    }
+    return;
+  }
   if(!document.fullscreenElement){
     (document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen)?.call(document.documentElement);
   } else {
@@ -875,9 +902,11 @@ function toggleFullscreen(){
 }
 fsBtn.addEventListener('click', toggleFullscreen);
 document.addEventListener('fullscreenchange', () => {
+  if(isTauri) return; // native path already manages the class itself
   document.body.classList.toggle('is-fullscreen', !!document.fullscreenElement);
 });
 document.addEventListener('webkitfullscreenchange', () => {
+  if(isTauri) return;
   document.body.classList.toggle('is-fullscreen', !!document.webkitFullscreenElement);
 });
 
@@ -904,7 +933,10 @@ function closeEditor(){
   editor.classList.remove('open');
   scrim.classList.remove('show');
 }
-editBtn.addEventListener('click', openEditor);
+function toggleEditor(){
+  editor.classList.contains('open') ? closeEditor() : openEditor();
+}
+editBtn.addEventListener('click', toggleEditor);
 cancelBtn.addEventListener('click', closeEditor);
 scrim.addEventListener('click', closeEditor);
 
@@ -955,6 +987,16 @@ saveBtn.addEventListener('click', () => {
 /* ---------------- keyboard ---------------- */
 window.addEventListener('keydown', (e) => {
   const editing = editor.classList.contains('open');
+
+  // Cmd+E (Mac) / Ctrl+E (Win/Linux) always toggles the editor, even
+  // while typing in the textarea — checked first so it can't be
+  // swallowed by the "typing" early-return below.
+  if((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'e'){
+    e.preventDefault();
+    toggleEditor();
+    return;
+  }
+
   if(editing){
     if(e.key === 'Escape') closeEditor();
     return;
@@ -968,7 +1010,7 @@ window.addEventListener('keydown', (e) => {
   } else if(e.key.toLowerCase() === 'f'){
     toggleFullscreen();
   } else if(e.key.toLowerCase() === 'e'){
-    openEditor();
+    toggleEditor();
   }
 });
 

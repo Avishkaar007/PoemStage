@@ -10,6 +10,8 @@ is the single source of truth — edit only that file for UI.
 
 Executables like .dmg, .deb, .exe are handled by default by Github and can be accessed in Releases Section.
 
+ Note : Shortcut keys aren't working in native apps , however WebApp is smooth.
+
 #
 
 ## One-time local setup ( NOT Compulsory, just for Local Running enthusiasts )
