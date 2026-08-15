@@ -424,6 +424,26 @@
     color: var(--text-dim);
     text-align:center;
   }
+  a:link {
+  color: rgb(93, 200, 136);
+  text-decoration: none; /* remove underline if desired */
+}
+
+/* Visited link */
+a:visited {
+  color: rgb(15, 123, 67);
+}
+
+/* Mouse over link */
+a:hover {
+  color: rgb(208, 60, 161);
+  text-decoration:dotted;
+}
+
+/* Selected link (while clicking) */
+a:active {
+  color: orange;
+}
   .theme-option.active span{ color: var(--text-primary); }
 
   /* ---------- mobile layout fix ----------
@@ -531,11 +551,6 @@
 <div class="scrim" id="scrim"></div>
 <div class="editor" id="editor">
   <h2>Edit poem</h2>
-  <p>Separate stanzas with a <b>blank line</b>. Wrap words to highlight in <b>**double asterisks**</b>. In Flow mode, click any line to jump to it.</p>
-
-  <label style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-dim);display:block;margin-bottom:8px;">Background</label>
-  <div class="theme-grid" id="themeGrid"></div>
-
   <div class="field-row">
     <div class="field">
       <label>Font</label>
@@ -557,11 +572,35 @@
     </div>
   </div>
 
+  <p>Separate stanzas with a <b>blank line</b>. Wrap words to highlight in <b>**double asterisks**</b>. In Flow mode, click any line to jump to it.</p>
+
   <textarea id="editorText"></textarea>
-  <div class="editor-actions">
+   <div class="editor-actions">
     <button class="btn primary" id="saveBtn">Save &amp; play</button>
     <button class="btn" id="cancelBtn">Cancel</button>
   </div>
+  <h2> <br> Background <br></h2>
+  <div class="theme-grid" id="themeGrid"></div>
+
+  <footer style="
+  position:static;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px 20px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: center;
+  background: #111;
+  color: #ccc;
+  font-size: 13px;
+  box-sizing: border-box;
+">
+Made by <a href="https://github.com/Avishkaar007/">Avishkaar</a> 💕 [and Claude 😉]
+
+</footer>
+  <p ></p>
+ 
 </div>
 
 <script>
