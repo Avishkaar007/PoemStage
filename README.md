@@ -15,8 +15,6 @@ poem-stage-app/
 └── .github/workflows/      ← left as-is, see note below
 ```
 
-Android/Capacitor support has been removed to keep this simple — just the
-web app and one lightweight desktop wrapper.
 
 ## One-time local setup
 
@@ -51,26 +49,3 @@ npm run build
 
 Output lands in `src-tauri/target/release/bundle/`.
 
-## App icon
-
-There's no icon set yet. Generate one from a single square PNG (1024x1024
-recommended):
-
-```bash
-npx tauri icon path/to/your-artwork.png
-```
-
-This creates `src-tauri/icons/` with all required sizes and formats. Then
-add the icon paths back into the `bundle.icon` array in
-`src-tauri/tauri.conf.json`.
-
-## About the GitHub Actions workflows
-
-The workflows in `.github/workflows/` were left untouched, since they were
-written for the previous Electron + Capacitor setup and reference commands
-(`electron-builder`, `cap sync android`) that no longer exist in this repo.
-They'll need updating before your next tagged release — happy to do that
-whenever you're ready, it's a small change (swap the build step for
-`npm run build` and point at `src-tauri/target/release/bundle/` instead).
-The web deploy workflow (`deploy-web.yml`) is unaffected and still works
-as-is, since `web/` didn't move.
