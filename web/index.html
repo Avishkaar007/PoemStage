@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Poem Stage</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@400;500&family=Martel:wght@300;400;600;700&family=Noto+Serif+Devanagari:wght@400;500;600&family=Mukta:wght@400;500;600&family=Yatra+One&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Spectral:ital,wght@0,300;0,400;0,500;1,400&family=Inter:wght@400;500&family=Martel:wght@300;400;600;700&family=Noto+Serif+Devanagari:wght@400;500;600&family=Mukta:wght@400;500;600&family=Yatra+One&family=IBM+Plex+Mono:wght@400;500&family=Rubik+Doodle+Shadow&family=Sekuya&family=Poppins:wght@300;400;500;600&family=Caveat:wght@400;500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Space+Mono:wght@400;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg-deep: #0b0e13;
@@ -23,6 +23,10 @@
     --poem-size-flow: 1.9rem;
 
     --stage-bg: radial-gradient(ellipse 120% 90% at 50% 40%, #0e1219 0%, #0b0e13 65%, #06070a 100%);
+
+    --input-bg: #0c0e13;
+    --footer-bg: #111;
+    --footer-text: #ccc;
   }
   *{ box-sizing:border-box; }
   html,body{ height:100%; }
@@ -238,7 +242,7 @@
   .ctrl-btn:hover{
     color: var(--accent-ember);
     border-color: var(--accent-ember-soft);
-    box-shadow: 0 0 12px rgba(232,168,87,0.15);
+    box-shadow: 0 0 12px var(--accent-ember-soft);
   }
   .ctrl-btn svg{ width:16px; height:16px; }
 
@@ -292,7 +296,7 @@
     color: var(--text-dim);
   }
   .field select{
-    background:#0c0e13;
+    background: var(--input-bg);
     border:1px solid var(--panel-border);
     border-radius:5px;
     color: var(--text-primary);
@@ -311,7 +315,7 @@
     flex:1;
     min-height:220px;
     resize:none;
-    background:#0c0e13;
+    background: var(--input-bg);
     border:1px solid var(--panel-border);
     border-radius:6px;
     color: var(--text-primary);
@@ -323,9 +327,10 @@
   }
   .editor textarea:focus{ border-color: var(--accent-ember-soft); }
   .editor-actions{
-    display:flex; gap:10px; margin-top:16px;
+    display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;
   }
   .btn{
+    display:inline-flex; align-items:center; gap:7px;
     font-family:'IBM Plex Mono', monospace;
     font-size:11px;
     letter-spacing:0.1em;
@@ -338,6 +343,7 @@
     cursor:pointer;
     transition: all .2s ease;
   }
+  .btn svg{ width:13px; height:13px; flex-shrink:0; }
   .btn.primary{
     background: var(--accent-ember);
     color:#1a1206;
@@ -357,42 +363,10 @@
   }
   .scrim.show{ opacity:1; pointer-events:auto; }
 
-  /* ---------- theme switcher (main screen quick popover) ---------- */
-  .theme-pop{
-    position:fixed;
-    top: calc(4vh + 46px);
-    right: 4vw;
-    z-index:5;
-    background: var(--panel-bg);
-    border:1px solid var(--panel-border);
-    border-radius:12px;
-    padding:12px;
-    display:grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap:9px;
-    opacity:0;
-    transform: translateY(-6px);
-    pointer-events:none;
-    transition: opacity .25s ease, transform .25s ease;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.4);
-  }
-  .theme-pop.open{
-    opacity:1;
-    transform: translateY(0);
-    pointer-events:auto;
-  }
-  .theme-swatch{
-    width:30px; height:30px;
-    border-radius:50%;
-    border:2px solid transparent;
-    cursor:pointer;
-    padding:0;
-    transition: transform .2s ease, border-color .2s ease;
-  }
-  .theme-swatch:hover{ transform: scale(1.12); }
-  .theme-swatch.active{
-    border-color: var(--accent-ember);
-    box-shadow: 0 0 10px var(--accent-ember-soft);
+  /* ---------- dark/light noise overlay tweak ---------- */
+  body.theme-light::before{
+    opacity: 0.02;
+    mix-blend-mode: multiply;
   }
 
   /* ---------- theme grid (inside editor menu) ---------- */
@@ -424,26 +398,17 @@
     color: var(--text-dim);
     text-align:center;
   }
-  a:link {
-  color: rgb(93, 200, 136);
-  text-decoration: none; /* remove underline if desired */
-}
+  a:link{
+    color: rgb(93, 200, 136);
+    text-decoration: none;
+  }
+  a:visited{ color: rgb(15, 123, 67); }
+  a:hover{
+    color: rgb(208, 60, 161);
+    text-decoration: dotted;
+  }
+  a:active{ color: orange; }
 
-/* Visited link */
-a:visited {
-  color: rgb(15, 123, 67);
-}
-
-/* Mouse over link */
-a:hover {
-  color: rgb(208, 60, 161);
-  text-decoration:dotted;
-}
-
-/* Selected link (while clicking) */
-a:active {
-  color: orange;
-}
   .theme-option.active span{ color: var(--text-primary); }
 
   /* ---------- mobile layout fix ----------
@@ -479,18 +444,6 @@ a:active {
       font-size: 9.5px;
       letter-spacing: 0.16em;
     }
-
-    .theme-pop{
-      top: calc(2.2vh + 40px);
-      right: 3vw;
-      left: auto;
-      transform: translateY(-6px);
-      grid-template-columns: repeat(4, 1fr);
-      padding: 10px;
-      gap: 7px;
-    }
-    .theme-pop.open{ transform: translateY(0); }
-    .theme-swatch{ width: 26px; height: 26px; }
 
     .editor{
       padding: 4vh 20px 24px;
@@ -535,8 +488,8 @@ a:active {
     <button data-mode="stage" class="active">Stage</button>
     <button data-mode="flow">Flow</button>
   </div>
-  <button class="ctrl-btn" id="themeBtn" title="Theme">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 22a10 10 0 1 1 0-20c1.1 0 2 .9 2 2 0 .5-.2 1-.5 1.4-.3.3-.5.8-.5 1.3 0 1.1.9 2 2 2h1.5c1.4 0 2.5 1.1 2.5 2.5C19 15.1 15.9 18 12 22Z"/></svg>
+  <button class="ctrl-btn" id="themeBtn" title="Switch to light">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>
   </button>
   <button class="ctrl-btn" id="editBtn" title="Edit poem (E)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
@@ -545,8 +498,6 @@ a:active {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
   </button>
 </div>
-
-<div class="theme-pop chrome" id="themePop"></div>
 
 <div class="scrim" id="scrim"></div>
 <div class="editor" id="editor">
@@ -563,6 +514,13 @@ a:active {
         <option value="'Noto Serif Devanagari','Cormorant Garamond',serif">Noto Serif Devanagari</option>
         <option value="'Mukta','Inter',sans-serif">Mukta (Hindi + Latin)</option>
         <option value="'Yatra One','Playfair Display',serif">Yatra One (Hindi display)</option>
+        <option value="'EB Garamond','Noto Serif Devanagari',serif">EB Garamond</option>
+        <option value="'DM Serif Display','Playfair Display',serif">DM Serif Display</option>
+        <option value="'Poppins','Mukta',sans-serif">Poppins</option>
+        <option value="'Caveat','Yatra One',cursive">Caveat (Handwritten)</option>
+        <option value="'Space Mono','IBM Plex Mono',monospace">Space Mono</option>
+        <option value="'Rubik Doodle Shadow', cursive">Rubik Doodle Shadow</option>
+        <option value="'Sekuya', sans-serif">Sekuya</option>
       </select>
     </div>
     <div class="field">
@@ -577,7 +535,12 @@ a:active {
   <textarea id="editorText"></textarea>
    <div class="editor-actions">
     <button class="btn primary" id="saveBtn">Save &amp; play</button>
+    <button class="btn" id="openFileBtn" title="Open a .txt file">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      Open file
+    </button>
     <button class="btn" id="cancelBtn">Cancel</button>
+    <input type="file" id="fileInput" accept=".txt,.md,.text,text/plain" hidden>
   </div>
   <h2> <br> Background <br></h2>
   <div class="theme-grid" id="themeGrid"></div>
@@ -591,9 +554,10 @@ a:active {
   white-space: nowrap;
   text-overflow: ellipsis;
   text-align: center;
-  background: #111;
-  color: #ccc;
+  background: var(--footer-bg);
+  color: var(--footer-text);
   font-size: 13px;
+  transition: background .4s ease, color .4s ease;
   box-sizing: border-box;
 ">
 Made by <a href="https://github.com/Avishkaar007/">Avishkaar</a> 💕 [and Claude 😉]
@@ -663,24 +627,62 @@ const controlsEl = document.getElementById('controls');
 const hintPrimary = document.getElementById('hintPrimary');
 
 /* ---------------- themes / background gradients ---------------- */
+/* Shared chrome (text/panel/input/footer colors) for the dark family.
+   Only the accent + stage gradient differ between dark themes. */
+const DARK_CHROME = {
+  mode:'dark',
+  text:'#ece4d3', dim:'#7b7a72',
+  panelBg:'#12151d', panelBorder:'#262a35', line:'#4b4e5c',
+  inputBg:'#0c0e13', footerBg:'#111', footerText:'#ccc'
+};
+
 const THEMES = [
-  { id:'ember',    name:'Ember Night',    accent:'#e8a857', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #0e1219 0%, #0b0e13 65%, #06070a 100%)' },
-  { id:'midnight', name:'Midnight Blue',  accent:'#6fa8e8', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #131b2e 0%, #0a0e1a 65%, #050710 100%)' },
-  { id:'violet',   name:'Deep Violet',    accent:'#b285e8', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #1c1230 0%, #12091f 65%, #07040f 100%)' },
-  { id:'forest',   name:'Emerald Forest', accent:'#6fd19a', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #0f2019 0%, #0a1510 65%, #050a08 100%)' },
-  { id:'rose',     name:'Rose Dusk',      accent:'#e88ba0', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #241016 0%, #17090d 65%, #0a0406 100%)' },
-  { id:'ocean',    name:'Ocean Abyss',    accent:'#5ec8d8', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #0a1b26 0%, #06121b 65%, #03080d 100%)' },
-  { id:'gold',     name:'Golden Hour',    accent:'#f0b94f', bg:'radial-gradient(ellipse 120% 90% at 50% 30%, #2b2013 0%, #17110a 65%, #0a0704 100%)' },
-  { id:'crimson',  name:'Crimson Ember',  accent:'#e86a5c', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #241009 0%, #170907 65%, #0a0403 100%)' },
-  { id:'aurora',   name:'Aurora',         accent:'#7fe8c0', bg:'radial-gradient(ellipse 130% 100% at 30% 20%, #0f2a2b 0%, #0a1a2a 45%, #08101f 75%, #05060d 100%)' },
-  { id:'mono',     name:'Monochrome',     accent:'#d8d5cd', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #17181a 0%, #0d0e0f 65%, #050505 100%)' },
+  // ---- dark themes ----
+  { id:'ember',    name:'Ember Night',    accent:'#e8a857', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #0e1219 0%, #0b0e13 65%, #06070a 100%)', ...DARK_CHROME },
+  { id:'midnight', name:'Midnight Blue',  accent:'#6fa8e8', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #131b2e 0%, #0a0e1a 65%, #050710 100%)', ...DARK_CHROME },
+  { id:'violet',   name:'Deep Violet',    accent:'#b285e8', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #1c1230 0%, #12091f 65%, #07040f 100%)', ...DARK_CHROME },
+  { id:'forest',   name:'Emerald Forest', accent:'#6fd19a', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #0f2019 0%, #0a1510 65%, #050a08 100%)', ...DARK_CHROME },
+  { id:'rose',     name:'Rose Dusk',      accent:'#e88ba0', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #241016 0%, #17090d 65%, #0a0406 100%)', ...DARK_CHROME },
+  { id:'ocean',    name:'Ocean Abyss',    accent:'#5ec8d8', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #0a1b26 0%, #06121b 65%, #03080d 100%)', ...DARK_CHROME },
+  { id:'gold',     name:'Golden Hour',    accent:'#f0b94f', bg:'radial-gradient(ellipse 120% 90% at 50% 30%, #2b2013 0%, #17110a 65%, #0a0704 100%)', ...DARK_CHROME },
+  { id:'crimson',  name:'Crimson Ember',  accent:'#e86a5c', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #241009 0%, #170907 65%, #0a0403 100%)', ...DARK_CHROME },
+  { id:'aurora',   name:'Aurora',         accent:'#7fe8c0', bg:'radial-gradient(ellipse 130% 100% at 30% 20%, #0f2a2b 0%, #0a1a2a 45%, #08101f 75%, #05060d 100%)', ...DARK_CHROME },
+  { id:'mono',     name:'Monochrome',     accent:'#d8d5cd', bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #17181a 0%, #0d0e0f 65%, #050505 100%)', ...DARK_CHROME },
+
+  // ---- light themes ----
+  { id:'linen',    name:'Soft Linen',    mode:'light', accent:'#b8763d',
+    bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #fdfbf6 0%, #f7f1e6 65%, #efe6d3 100%)',
+    text:'#2b2620', dim:'#8a8175', panelBg:'#fffdf9', panelBorder:'#e4dcc9', line:'#d8cfba',
+    inputBg:'#ffffff', footerBg:'#f1ead9', footerText:'#5c5548' },
+  { id:'daylight', name:'Sky Daylight',  mode:'light', accent:'#3b82c4',
+    bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #f7fbff 0%, #eaf3fb 65%, #dbe9f5 100%)',
+    text:'#1c2b3a', dim:'#748394', panelBg:'#ffffff', panelBorder:'#d7e3ee', line:'#c7d6e3',
+    inputBg:'#ffffff', footerBg:'#e7f0f8', footerText:'#405264' },
+  { id:'blush',    name:'Blush Paper',   mode:'light', accent:'#d1638a',
+    bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #fff7fa 0%, #fdeef3 65%, #f9e0e9 100%)',
+    text:'#341c26', dim:'#8f7680', panelBg:'#ffffff', panelBorder:'#f0d9e2', line:'#e6c9d4',
+    inputBg:'#ffffff', footerBg:'#fbe8ef', footerText:'#5c4650' },
+  { id:'mint',     name:'Mint Fresh',    mode:'light', accent:'#2f9e6e',
+    bg:'radial-gradient(ellipse 120% 90% at 50% 40%, #f6fdf9 0%, #e9f7ef 65%, #d9f0e3 100%)',
+    text:'#17281f', dim:'#71887c', panelBg:'#ffffff', panelBorder:'#d3ecdd', line:'#c4e3d0',
+    inputBg:'#ffffff', footerBg:'#e4f5ea', footerText:'#3a5546' },
 ];
 let currentTheme = 'ember';
+let lastDarkTheme = 'ember';
+let lastLightTheme = 'linen';
+
+const MOON_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>';
+const SUN_ICON  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>';
 
 function hexToRgba(hex, a){
   const h = hex.replace('#','');
   const r = parseInt(h.substring(0,2),16), g = parseInt(h.substring(2,4),16), b = parseInt(h.substring(4,6),16);
   return `rgba(${r},${g},${b},${a})`;
+}
+
+function updateThemeToggleIcon(mode){
+  themeBtn.innerHTML = mode === 'light' ? SUN_ICON : MOON_ICON;
+  themeBtn.title = mode === 'light' ? 'Switch to dark' : 'Switch to light';
 }
 
 function applyTheme(id, persist = true){
@@ -689,46 +691,47 @@ function applyTheme(id, persist = true){
   root.style.setProperty('--stage-bg', t.bg);
   root.style.setProperty('--accent-ember', t.accent);
   root.style.setProperty('--accent-ember-soft', hexToRgba(t.accent, 0.42));
-  if(persist) currentTheme = t.id;
-  document.querySelectorAll('.theme-swatch, .theme-option').forEach(el => {
+  root.style.setProperty('--text-primary', t.text);
+  root.style.setProperty('--text-dim', t.dim);
+  root.style.setProperty('--panel-bg', t.panelBg);
+  root.style.setProperty('--panel-border', t.panelBorder);
+  root.style.setProperty('--line', t.line);
+  root.style.setProperty('--input-bg', t.inputBg);
+  root.style.setProperty('--footer-bg', t.footerBg);
+  root.style.setProperty('--footer-text', t.footerText);
+  document.body.classList.toggle('theme-light', t.mode === 'light');
+
+  if(persist){
+    currentTheme = t.id;
+    if(t.mode === 'light') lastLightTheme = t.id; else lastDarkTheme = t.id;
+    updateThemeToggleIcon(t.mode);
+  }
+  document.querySelectorAll('.theme-option').forEach(el => {
     el.classList.toggle('active', el.dataset.theme === t.id);
   });
 }
 
 function buildThemePickers(){
-  const pop = document.getElementById('themePop');
   const grid = document.getElementById('themeGrid');
-  pop.innerHTML = '';
   grid.innerHTML = '';
   THEMES.forEach(t => {
-    const swatch = document.createElement('button');
-    swatch.className = 'theme-swatch' + (t.id === currentTheme ? ' active' : '');
-    swatch.dataset.theme = t.id;
-    swatch.title = t.name;
-    swatch.style.background = t.bg;
-    swatch.addEventListener('click', () => applyTheme(t.id));
-    pop.appendChild(swatch);
-
     const opt = document.createElement('button');
     opt.className = 'theme-option' + (t.id === currentTheme ? ' active' : '');
     opt.dataset.theme = t.id;
-    opt.innerHTML = `<span class="swatch" style="background:${t.bg}"></span><span>${t.name}</span>`;
+    const label = t.mode === 'light' ? `${t.name} · Light` : t.name;
+    opt.innerHTML = `<span class="swatch" style="background:${t.bg}"></span><span>${label}</span>`;
     opt.addEventListener('click', () => applyTheme(t.id));
     grid.appendChild(opt);
   });
 }
 
+function toggleDarkLight(){
+  const t = THEMES.find(x => x.id === currentTheme) || THEMES[0];
+  applyTheme(t.mode === 'light' ? lastDarkTheme : lastLightTheme);
+}
+
 const themeBtn = document.getElementById('themeBtn');
-const themePop = document.getElementById('themePop');
-themeBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  themePop.classList.toggle('open');
-});
-document.addEventListener('click', (e) => {
-  if(themePop.classList.contains('open') && !themePop.contains(e.target) && e.target !== themeBtn){
-    themePop.classList.remove('open');
-  }
-});
+themeBtn.addEventListener('click', toggleDarkLight);
 
 function toRoman(n){
   const vals=[10,9,5,4,1], syms=['X','IX','V','IV','I'];
@@ -885,6 +888,8 @@ const editorText = document.getElementById('editorText');
 const editBtn = document.getElementById('editBtn');
 const saveBtn = document.getElementById('saveBtn');
 const cancelBtn = document.getElementById('cancelBtn');
+const openFileBtn = document.getElementById('openFileBtn');
+const fileInput = document.getElementById('fileInput');
 const fontSelect = document.getElementById('fontSelect');
 const sizeRange = document.getElementById('sizeRange');
 const sizeReadout = document.getElementById('sizeReadout');
@@ -902,6 +907,22 @@ function closeEditor(){
 editBtn.addEventListener('click', openEditor);
 cancelBtn.addEventListener('click', closeEditor);
 scrim.addEventListener('click', closeEditor);
+
+openFileBtn.addEventListener('click', () => fileInput.click());
+fileInput.addEventListener('change', () => {
+  const file = fileInput.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    editorText.value = reader.result;
+    editorText.focus();
+  };
+  reader.onerror = () => {
+    alert('Could not read that file. Please pick a plain text (.txt) file.');
+  };
+  reader.readAsText(file);
+  fileInput.value = ''; // allow re-selecting the same file later
+});
 
 fontSelect.addEventListener('change', () => {
   document.documentElement.style.setProperty('--poem-font', fontSelect.value);
@@ -976,6 +997,7 @@ slides = parseStanzas(DEFAULT_POEM);
 flowLines = parseFlowLines(DEFAULT_POEM);
 currentLine = flowLines.findIndex(l => !l.isSpacer);
 buildThemePickers();
+updateThemeToggleIcon(THEMES.find(t => t.id === currentTheme).mode);
 renderStageSlide();
 </script>
 </body>
