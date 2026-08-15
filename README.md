@@ -1,5 +1,10 @@
 # Poem Stage
 
+## Live Demo
+
+https://avishkaar007.github.io/PoemStage/
+
+
 One HTML file, wrapped as a native desktop app via Tauri. `web/index.html`
 is the single source of truth — edit only that file.
 

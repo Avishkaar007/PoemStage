@@ -24,7 +24,7 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["dmg", "nsis"],
+    "targets": ["dmg", "nsis", "deb"],
     "icon": ["icons/icon.png"]
   }
 }
